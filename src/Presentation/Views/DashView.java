@@ -12,8 +12,6 @@ import Infrastructure.Repositories.CustomerRepository;
 import Infrastructure.Repositories.TransactionRepository;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -29,14 +27,14 @@ public class DashView extends JFrame {
     private JButton logOutBtn;
     private JButton addTransactionBtn;
     private JButton reloadBtn;
-    private UserSession userSession = UserSession.getInstance();
+    private final UserSession userSession = UserSession.getInstance();
 
     public DashView() throws SQLException {
 
         setTitle("Dashboard");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setContentPane(dashPanel);
-        setLocationRelativeTo(null); // Centrar la ventana
+        setLocationRelativeTo(null);
         pack();
 
         initComponents();
@@ -52,10 +50,8 @@ public class DashView extends JFrame {
     }
 
     private void initComponents() {
-
         lblUserName.setText("Welcome, " + userSession.getFullName());
 
-        // Configuración de visibilidad de los componentes según si el usuario es admin o no
         boolean isAdmin = userSession.isAdmin();
         addCustomerButton.setVisible(isAdmin);
         addFoundsToAtmBtn.setVisible(isAdmin);
@@ -82,7 +78,7 @@ public class DashView extends JFrame {
     }
 
     private void addReloadBtnListener() {
-        reloadBtn.addActionListener(e -> {
+        reloadBtn.addActionListener(_ -> {
             try {
                 loadTransactions();
                 loadAtms();
@@ -96,7 +92,7 @@ public class DashView extends JFrame {
     }
 
     private void addExitBtnListener() {
-        logOutBtn.addActionListener(e -> {
+        logOutBtn.addActionListener(_ -> {
             dispose();
             UserSession.getInstance().destroy();
             LoginForm loginForm = new LoginForm();
