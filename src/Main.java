@@ -1,6 +1,5 @@
-import Infrastructure.DbConn;
-import Presentation.Views.LoginForm;
-
+import infrastructure.DbConn;
+import Presentation.views.LoginForm;
 
 import java.sql.SQLException;
 
