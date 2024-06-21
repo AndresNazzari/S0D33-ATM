@@ -1,4 +1,4 @@
-package core.Application.services;
+package core.application.services;
 
 public class LoginServices {
 

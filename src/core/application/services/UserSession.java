@@ -1,4 +1,6 @@
-package core.Application.services;
+package core.application.services;
+
+import core.domain.TransactionType;
 
 public class UserSession {
     private  static  UserSession instance = null;
@@ -91,5 +93,13 @@ public class UserSession {
 
     public void setBalance(int balance) {
         this.balance = balance;
+    }
+
+    public static void updateBalance(int amount, TransactionType transactionType) {
+        if (transactionType == TransactionType.D) {
+            UserSession.getInstance().setBalance(UserSession.getInstance().getBalance() + amount);
+        } else {
+            UserSession.getInstance().setBalance(UserSession.getInstance().getBalance() - amount);
+        }
     }
 }

@@ -1,36 +1,40 @@
 package infrastructure;
 
-import core.Application.services.PasswordService;
+import core.application.services.PasswordService;
 
 import java.sql.*;
 
 public class DbConn {
     private static DbConn instance = null;
-    public static Connection connection;
 
     private DbConn() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            String url = "jdbc:mysql://localhost:3306/s0d33-atm";
-            String username ="root";
-            String password = "";
-
-            connection = DriverManager.getConnection(url, username, password);
-
-        } catch (Exception e) {
-            throw new RuntimeException("Error connecting to the database", e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException("Driver not found", e);
         }
     }
 
     public static synchronized DbConn getInstance() {
-        if (instance == null) instance = new DbConn();
+        if (instance == null) {
+            instance = new DbConn();
+        }
         return instance;
     }
 
-   public Connection getConnection() {
-        return connection;
+    public Connection getConnection() {
+        try {
+            String url = "jdbc:mysql://localhost:3306/s0d33-atm";
+            String username = "root";
+            String password = "";
+            return DriverManager.getConnection(url, username, password);
+        } catch (SQLException e) {
+            throw new RuntimeException("Error connecting to the database", e);
+        }
     }
 
+    // Create the admin user if it doesn't exist
+    // This is a one-time operation
     public static void createAdminUser() throws SQLException {
         String dni = "33028540";
         String firstName = "Andres";

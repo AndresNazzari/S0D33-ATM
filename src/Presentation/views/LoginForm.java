@@ -1,10 +1,10 @@
 package Presentation.views;
 
-import core.Application.services.LoginServices;
-import core.Application.services.PasswordService;
-import core.Application.services.UserService;
-import core.Application.services.UserSession;
+import core.application.services.LoginServices;
+import core.application.services.PasswordService;
+import core.application.services.UserSession;
 import core.domain.User;
+import infrastructure.repositories.UserRepository;
 
 import javax.swing.*;
 
@@ -37,11 +37,12 @@ public class LoginForm extends JFrame {
 
             try {
                 int dni = Integer.parseInt(dniString);
-                User user = UserService.getUserByDni(dni);
+                User user = UserRepository.getUserByDni(dni);
 
                 if (user != null && PasswordService.checkPassword(password, user.password)) {
                     UserSession userSession = UserSession.getInstance();
                     userSession.setDni(dni);
+                    userSession.setUserId(user.userId);
                     userSession.setFirstName(user.firstName);
                     userSession.setLastName(user.lastName);
                     userSession.setAccountId(user.accountId);

@@ -1,12 +1,13 @@
 package Presentation.views;
 
-import core.Application.services.AtmService;
-import core.Application.services.CustomerService;
-import core.Application.services.TransactionServices;
-import core.Application.services.UserSession;
+import core.application.services.AtmService;
+import core.application.services.CustomerService;
+import core.application.services.TransactionServices;
+import core.application.services.UserSession;
 import core.domain.Atm;
 import core.domain.Customer;
 import core.domain.Transaction;
+import core.domain.TransactionType;
 import infrastructure.repositories.AtmRepository;
 import infrastructure.repositories.CustomerRepository;
 import infrastructure.repositories.TransactionRepository;
@@ -25,8 +26,9 @@ public class DashView extends JFrame {
     private JButton addAtmBtn;
     private JTable customersTable;
     private JButton logOutBtn;
-    private JButton addTransactionBtn;
     private JButton reloadBtn;
+    private JButton depositBtn;
+    private JButton withdrawalBtn;
     private final UserSession userSession = UserSession.getInstance();
 
     public DashView() throws SQLException {
@@ -38,8 +40,7 @@ public class DashView extends JFrame {
         pack();
 
         initComponents();
-        addExitBtnListener();
-        addReloadBtnListener();
+        addListeners();
 
         loadTransactions();
         loadAtms();
@@ -54,6 +55,8 @@ public class DashView extends JFrame {
 
         boolean isAdmin = userSession.isAdmin();
         addCustomerButton.setVisible(isAdmin);
+        // depositBtn.setVisible(!isAdmin);
+        // withdrawalBtn.setVisible(!isAdmin);
         addFoundsToAtmBtn.setVisible(isAdmin);
         addAtmBtn.setVisible(isAdmin);
         customersTable.setVisible(isAdmin);
@@ -62,6 +65,32 @@ public class DashView extends JFrame {
         setLocationRelativeTo(null);
     }
 
+    private void addListeners(){
+        addExitBtnListener();
+        addReloadBtnListener();
+        addDepositBtnListener();
+        addWithdrawalBtnListener();
+    }
+
+    private void addDepositBtnListener() {
+        depositBtn.addActionListener(_ -> {
+            dispose();
+
+            TransactionView transactionView = new TransactionView(TransactionType.D);
+            transactionView.setVisible(true);
+            transactionView.pack();
+        });
+    }
+
+    private void addWithdrawalBtnListener() {
+        withdrawalBtn.addActionListener(_ -> {
+            dispose();
+
+            TransactionView transactionView = new TransactionView(TransactionType.W);
+            transactionView.setVisible(true);
+            transactionView.pack();
+        });
+    }
     private void loadTransactions() throws SQLException {
         List<Transaction> transactions = TransactionRepository.getTransactions(userSession);
         transactionsTable.setModel(TransactionServices.transactionsToTableModel(transactions));
@@ -99,4 +128,5 @@ public class DashView extends JFrame {
             loginForm.setVisible(true);
         });
     }
+
 }

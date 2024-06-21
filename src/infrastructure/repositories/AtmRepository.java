@@ -1,6 +1,8 @@
 package infrastructure.repositories;
 
+import core.application.mappings.DbAtmToAtm;
 import core.domain.Atm;
+import core.domain.TransactionType;
 import infrastructure.DbConn;
 
 import java.sql.Connection;
@@ -14,22 +16,48 @@ public class AtmRepository {
 
     public static List<Atm> getAtms() throws SQLException {
         List<Atm> atms = new ArrayList<>();
-
-        Connection conn = DbConn.getInstance().getConnection();
         String sql = "SELECT * FROM atm";
-        PreparedStatement stmt = conn.prepareStatement(sql);
 
-        try (ResultSet rs = stmt.executeQuery()) {
+        // Utilizar try-with-resources para manejar automáticamente el cierre de Connection y PreparedStatement
+        try (Connection conn = DbConn.getInstance().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) { // ResultSet también se incluye en try-with-resources
+
             while (rs.next()) {
-                Atm atm = new Atm();
-                atm.setAtmId(rs.getInt("id"));
-                atm.setBalance(rs.getInt("balance"));
-
-                atms.add(atm);
+                atms.add(DbAtmToAtm.mapAtm(rs));
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+
+        } // El bloque try cierra automáticamente ResultSet, PreparedStatement y Connection
+
         return atms;
     }
+
+    public static void updateBalance(int atmId, int amount, TransactionType transactionType) throws SQLException {
+        String transactionTypeString = transactionType == TransactionType.D ? " + " : " - ";
+        String sql = "UPDATE atm SET balance = balance" +
+                transactionTypeString + "? WHERE id = ?";
+
+        try (Connection conn = DbConn.getInstance().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, amount);
+            stmt.setInt(2, atmId);
+            int affectedRows = stmt.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("Updating ATM failed, no rows affected.");
+            }
+        }
+    }
+
+    public static void addAtm(Atm atm) throws SQLException {
+        String sql = "INSERT INTO atm (balance) VALUES (?)";
+
+        try (Connection conn = DbConn.getInstance().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, atm.getBalance());
+            stmt.executeUpdate();
+
+        }
+    }
+
 }
