@@ -9,14 +9,14 @@ public class DbUserToUser {
 
     public static User mapUser (ResultSet resultSet) throws SQLException {
         User user = new User();
-        user.userId = resultSet.getInt("id");
-        user.firstName = resultSet.getString("first_name");
-        user.lastName = resultSet.getString("last_name");
-        user.dni = resultSet.getString("dni");
-        user.password = resultSet.getString("password");
-        user.isAdmin = resultSet.getBoolean("is_admin");
-        user.accountId = resultSet.getInt("account_id");
-        user.balance = resultSet.getInt("balance");
+        user.setUserId(resultSet.getInt("id"));
+        user.setFirstName(resultSet.getString("first_name"));
+        user.setLastName(resultSet.getString("last_name"));
+        user.setDni(resultSet.getString("dni"));
+        user.setPassword(resultSet.getString("password"));
+        user.setAdmin(resultSet.getBoolean("is_admin"));
+        user.setAccountId(resultSet.getInt("account_id"));
+        user.setBalance(resultSet.getInt("balance"));
 
         return user;
     }

@@ -39,15 +39,15 @@ public class LoginForm extends JFrame {
                 int dni = Integer.parseInt(dniString);
                 User user = UserRepository.getUserByDni(dniString);
 
-                if (user != null && PasswordService.checkPassword(password, user.password)) {
+                if (user != null && PasswordService.checkPassword(password, user.getPassword())) {
                     UserSession userSession = UserSession.getInstance();
                     userSession.setDni(dni);
-                    userSession.setUserId(user.userId);
-                    userSession.setFirstName(user.firstName);
-                    userSession.setLastName(user.lastName);
-                    userSession.setAccountId(user.accountId);
-                    userSession.setBalance(user.balance);
-                    userSession.setAdmin(user.isAdmin);
+                    userSession.setUserId(user.getUserId());
+                    userSession.setFirstName(user.getFirstName());
+                    userSession.setLastName(user.getLastName());
+                    userSession.setAccountId(user.getAccountId());
+                    userSession.setBalance(user.getBalance());
+                    userSession.setAdmin(user.isAdmin());
                     dispose();
 
                     DashView dashView = new DashView();
@@ -61,6 +61,4 @@ public class LoginForm extends JFrame {
             }
         });
     }
-
-
 }

@@ -50,7 +50,7 @@ public class UserRepository {
                 "WHERE u.dni = ?";
 
         try (Connection connection = dbConn.getConnection();
-             PreparedStatement stmt = connection.prepareStatement(sql)) {
+            PreparedStatement stmt = connection.prepareStatement(sql)) {
 
             stmt.setString(1, dni);
 
