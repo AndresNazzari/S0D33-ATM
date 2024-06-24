@@ -2,7 +2,6 @@ package infrastructure;
 
 import core.application.services.PasswordService;
 import infrastructure.repositories.AccountRepository;
-import infrastructure.repositories.CustomerRepository;
 import infrastructure.repositories.UserRepository;
 
 import java.sql.*;

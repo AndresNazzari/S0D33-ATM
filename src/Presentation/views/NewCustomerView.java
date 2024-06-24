@@ -77,22 +77,17 @@ public class NewCustomerView extends JFrame {
 
     private void addCancelBtnListener(){
         cancelBtn.addActionListener(_ -> {
-            try {
-                dispose();
+            dispose();
 
-                DashView dashView = new DashView();
-                dashView.setVisible(true);
-                dashView.pack();
-            } catch (SQLException ex) {
-                throw new RuntimeException(ex);
-            }
+            DashView dashView = new DashView();
+            dashView.setVisible(true);
+            dashView.pack();
         });
     }
 
     private String customerValidations(String firstName, String lastName, String dni, String password, String password2, int initialFounds, boolean isAdministrator){
         String errorMessage = "";
 
-        // Validación de firstName y lastName: solo letras y números, longitud 4-20 caracteres
         if (!firstName.matches("[a-zA-Z0-9]{4,20}")) {
             errorMessage += "First name must be between 4 and 20 alphanumeric characters.\n";
         }
@@ -101,12 +96,10 @@ public class NewCustomerView extends JFrame {
             errorMessage += "Last name must be between 4 and 20 alphanumeric characters.\n";
         }
 
-        // Validación de dni: solo números y máximo 10 caracteres
         if (!dni.matches("\\d{1,10}")) {
             errorMessage += "DNI must be a number up to 10 digits long.\n";
         }
 
-        // Validación de passwords: deben coincidir y cumplir con la longitud de 4-10 caracteres
         if (!password.equals(password2)) {
             errorMessage += "Passwords do not match.\n";
         }
@@ -114,7 +107,6 @@ public class NewCustomerView extends JFrame {
             errorMessage += "Password must be between 4 and 10 alphanumeric characters.\n";
         }
 
-        // Validación de initialFounds: debe ser un número entero mayor a 0
         if (initialFounds <= 0) {
             errorMessage += "Initial funds must be greater than 0.\n";
         }
@@ -126,14 +118,9 @@ public class NewCustomerView extends JFrame {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                try {
-                    DashView dashView = new DashView();
-                    dashView.setVisible(true);
-                    dashView.pack();
-                } catch (SQLException ex) {
-                    throw new RuntimeException(ex);
-                }
-
+                DashView dashView = new DashView();
+                dashView.setVisible(true);
+                dashView.pack();
             }
         });
     }

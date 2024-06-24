@@ -20,7 +20,7 @@ public class TransactionRepository {
         String userSql = sql + (session.isAdmin() ? "" : " WHERE account_id = ?");
 
         try (Connection conn = DbConn.getInstance().getConnection();
-             PreparedStatement stmt = conn.prepareStatement(userSql)) {
+            PreparedStatement stmt = conn.prepareStatement(userSql)) {
 
             if (!session.isAdmin()) {
                 stmt.setInt(1, session.getAccountId());
@@ -30,9 +30,8 @@ public class TransactionRepository {
                 while (rs.next()) {
                     transactions.add(DbTransactionToTransaction.mapTransaction(rs));
                 }
-            } // El ResultSet se cierra aquí automáticamente
-
-        } // El PreparedStatement y Connection se cierran aquí automáticamente
+            }
+        }
 
         return transactions;
     }
@@ -55,7 +54,7 @@ public class TransactionRepository {
                     stmt.setInt(2, atmId);
                     break;
                 case A:
-                    transactionTypeValue = "W";
+                    transactionTypeValue = "A";
                     stmt.setInt(2, atmId);
                     break;
                 case T:

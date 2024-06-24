@@ -122,13 +122,9 @@ public class TransactionView extends JFrame{
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                try {
-                    DashView dashView = new DashView();
-                    dashView.setVisible(true);
-                    dashView.pack();
-                } catch (SQLException ex) {
-                    throw new RuntimeException(ex);
-                }
+                DashView dashView = new DashView();
+                dashView.setVisible(true);
+                dashView.pack();
 
             }
         });

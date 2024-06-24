@@ -13,7 +13,7 @@ import java.util.List;
 
 public class CustomerRepository {
 
-    public static List<Customer> getCustomers(boolean includeMe) throws SQLException {
+    public static List<Customer> getCustomers(boolean includeMe)  {
         List<Customer> customers = new ArrayList<>();
         String sql = "SELECT u.id, u.first_name, u.last_name, u.dni , a.id AS account_id, a.balance " +
                 "FROM users u " +
@@ -22,14 +22,13 @@ public class CustomerRepository {
             sql += "WHERE u.id != ?";
         }
 
-
         try {
             Connection conn = DbConn.getInstance().getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql);
             if (!includeMe) {
                 stmt.setInt(1, UserSession.getInstance().getUserId());
             }
-            ResultSet rs = stmt.executeQuery(); // ResultSet también se incluye en try-with-resources
+            ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
                 customers.add(DbCustomerToCustomer.mapCustomer(rs));

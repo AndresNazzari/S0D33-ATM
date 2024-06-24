@@ -33,7 +33,7 @@ public class DashView extends JFrame {
     private JLabel balanceLabel;
     private final UserSession userSession = UserSession.getInstance();
 
-    public DashView() throws SQLException {
+    public DashView() {
 
         setTitle("Dashboard");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -57,7 +57,6 @@ public class DashView extends JFrame {
         withdrawalBtn.setVisible(!isAdmin);
         transferBtn.setVisible(!isAdmin);
         addAtmBtn.setVisible(isAdmin);
-
 
         pack();
         setLocationRelativeTo(null);
@@ -95,15 +94,13 @@ public class DashView extends JFrame {
         atmTable.setModel(AtmService.atmsToTableModel(atms));
     }
 
-    private void loadCustomers() throws SQLException {
+    private void loadCustomers() {
         List<Customer> customers = CustomerRepository.getCustomers(true);
         customersTable.setModel(CustomerService.customersToTableModel(customers));
     }
 
     private void addReloadBtnListener() {
-        reloadBtn.addActionListener(_ -> {
-            loadData();
-        });
+        reloadBtn.addActionListener(_ -> loadData());
     }
 
     private void addAddFoundsToAtmListener() {
@@ -184,7 +181,6 @@ public class DashView extends JFrame {
                     JOptionPane.showMessageDialog(this, "Database error: " + ex.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
-
         });
     }
 }

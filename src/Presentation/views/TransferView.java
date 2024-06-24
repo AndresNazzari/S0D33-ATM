@@ -32,11 +32,7 @@ public class TransferView extends JFrame {
         balanceLabel.setText("$" + UserSession.getInstance().getBalance());
         addWinListener();
         addMakeTransferBtnListener();
-        try {
-            loadCustomers();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        loadCustomers();
     }
 
     public void addMakeTransferBtnListener() {
@@ -96,7 +92,7 @@ public class TransferView extends JFrame {
         return Message;
     }
 
-    private void loadCustomers() throws SQLException {
+    private void loadCustomers() {
         List<Customer> customers = CustomerRepository.getCustomers(false);
         customersTable.setModel(CustomerService.customersToTableModel(customers));
     }
@@ -105,13 +101,9 @@ public class TransferView extends JFrame {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                try {
-                    DashView dashView = new DashView();
-                    dashView.setVisible(true);
-                    dashView.pack();
-                } catch (SQLException ex) {
-                    throw new RuntimeException(ex);
-                }
+                DashView dashView = new DashView();
+                dashView.setVisible(true);
+                dashView.pack();
 
             }
         });
