@@ -1,6 +1,9 @@
 package infrastructure;
 
 import core.application.services.PasswordService;
+import infrastructure.repositories.AccountRepository;
+import infrastructure.repositories.CustomerRepository;
+import infrastructure.repositories.UserRepository;
 
 import java.sql.*;
 
@@ -39,26 +42,25 @@ public class DbConn {
         String dni = "33028540";
         String firstName = "Andres";
         String lastName = "Nazzari";
-        String password = PasswordService.hashPassword("kuma");
+        String password = PasswordService.hashPassword("33028540");
+        boolean isAdmin = true;
+        int initialFounds = 5000;
 
         Connection conn = getInstance().getConnection();
         PreparedStatement checkStmt = conn.prepareStatement("SELECT * FROM users WHERE dni = ?");
         checkStmt.setString(1, dni);
         ResultSet rs = checkStmt.executeQuery();
-
         try {
             if (rs.next()) {
                 System.out.println("Admin user already exists");
             } else {
-                try (PreparedStatement insertStmt = conn.prepareStatement("INSERT INTO users (first_name, last_name, dni, password, is_admin) VALUES (?, ?, ?, ?, ?)")) {
-                    insertStmt.setString(1, firstName);
-                    insertStmt.setString(2, lastName);
-                    insertStmt.setString(3, dni);
-                    insertStmt.setString(4, password);
-                    insertStmt.setInt(5, 1);
+                try  {
+                    int id = UserRepository.createUser(firstName, lastName, dni, password, isAdmin);
+                    AccountRepository.createAccount(id, initialFounds);
 
-                    insertStmt.executeUpdate();
-                    System.out.print("Admin user Created. DNI: " + dni + " Password: kuma");
+                    System.out.print("Admin user Created. DNI: " + dni + " Password: 33028540");
+                } catch (SQLException e) {
+                    throw new RuntimeException("Error creating admin user", e);
                 }
             }
         } finally {

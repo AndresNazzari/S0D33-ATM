@@ -37,7 +37,7 @@ public class LoginForm extends JFrame {
 
             try {
                 int dni = Integer.parseInt(dniString);
-                User user = UserRepository.getUserByDni(dni);
+                User user = UserRepository.getUserByDni(dniString);
 
                 if (user != null && PasswordService.checkPassword(password, user.password)) {
                     UserSession userSession = UserSession.getInstance();
@@ -47,7 +47,7 @@ public class LoginForm extends JFrame {
                     userSession.setLastName(user.lastName);
                     userSession.setAccountId(user.accountId);
                     userSession.setBalance(user.balance);
-                    userSession.setAdmin(true);
+                    userSession.setAdmin(user.isAdmin);
                     dispose();
 
                     DashView dashView = new DashView();

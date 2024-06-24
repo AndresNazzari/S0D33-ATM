@@ -5,10 +5,13 @@ import org.mindrot.jbcrypt.BCrypt;
 public class PasswordService {
 
     public static String hashPassword(String password) {
-       return  BCrypt.hashpw(password, BCrypt.gensalt(12) );
+        return password;
+
+        //return  BCrypt.hashpw(password, BCrypt.gensalt() );
     }
 
     public static boolean checkPassword(String candidate, String hashedPassword){
-        return BCrypt.checkpw(candidate, hashedPassword);
+        return candidate.equals(hashedPassword);
+        //return BCrypt.checkpw(candidate, hashedPassword);
     }
 }

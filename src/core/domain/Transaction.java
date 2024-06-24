@@ -5,7 +5,6 @@ public class Transaction {
     private int amount;
     private String type;
     private String createdAt;
-    private int atmId;
 
     public int getTransactionId() {
         return transactionId;
@@ -39,11 +38,4 @@ public class Transaction {
         this.createdAt = createdAt;
     }
 
-    public int getAtmId() {
-        return atmId;
-    }
-
-    public void setAtmId(int atmId) {
-        this.atmId = atmId;
-    }
 }

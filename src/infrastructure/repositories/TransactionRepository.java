@@ -6,10 +6,7 @@ import core.domain.Transaction;
 import core.domain.TransactionType;
 import infrastructure.DbConn;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +16,7 @@ public class TransactionRepository {
         List<Transaction> transactions = new ArrayList<>();
         String sql = "SELECT t.id, t.amount, t.type, t.created_at, a.id AS atm_id " +
                 "FROM transactions t " +
-                "INNER JOIN atm a ON a.id = t.atm_id ";
+                "LEFT JOIN atm a ON a.id = t.atm_id ";
         String userSql = sql + (session.isAdmin() ? "" : " WHERE account_id = ?");
 
         try (Connection conn = DbConn.getInstance().getConnection();
@@ -41,14 +38,35 @@ public class TransactionRepository {
     }
 
     public static void createTransaction(int atmId, int amount, int accountId, TransactionType transactionType) throws SQLException {
-        String transactionTypeValue = transactionType == TransactionType.D ? "D" : "W";
+        String transactionTypeValue = "";
         String sql = "INSERT INTO transactions (amount, atm_id, account_id, type) VALUES (?, ?, ?, ?)" ;
+
         try (Connection conn = DbConn.getInstance().getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, amount);
-            stmt.setInt(2, atmId);
+
+            switch (transactionType) {
+                case D:
+                    transactionTypeValue = "D";
+                    stmt.setInt(2, atmId);
+                    break;
+                case W:
+                    transactionTypeValue = "W";
+                    stmt.setInt(2, atmId);
+                    break;
+                case A:
+                    transactionTypeValue = "W";
+                    stmt.setInt(2, atmId);
+                    break;
+                case T:
+                    transactionTypeValue = "T";
+                    stmt.setNull(2, Types.NULL);
+                    break;
+            }
+
             stmt.setInt(3, accountId);
             stmt.setString(4, transactionTypeValue);
+
             int affectedRows = stmt.executeUpdate();
             if (affectedRows == 0) {
                 throw new SQLException("Updating ACCOUNT failed, no rows affected.");

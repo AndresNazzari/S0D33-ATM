@@ -14,7 +14,6 @@ public class TransactionServices {
         model.addColumn("Transaction ID");
         model.addColumn("Amount");
         model.addColumn("Type");
-        model.addColumn("ATM ID");
         model.addColumn("Created At");
 
         for (Transaction transaction : transactions) {
@@ -22,7 +21,6 @@ public class TransactionServices {
                     transaction.getTransactionId(),
                     transaction.getAmount(),
                     transaction.getType(),
-                    transaction.getAtmId(),
                     transaction.getCreatedAt()
             });
         }

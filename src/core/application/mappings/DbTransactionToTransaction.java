@@ -11,7 +11,6 @@ public class DbTransactionToTransaction {
         transaction.setTransactionId(resultSet.getInt("id"));
         transaction.setAmount(resultSet.getInt("amount"));
         transaction.setType(resultSet.getString("type"));
-        transaction.setAtmId(resultSet.getInt("atm_id"));
         transaction.setCreatedAt(String.valueOf(resultSet.getDate("created_at")));
 
         return transaction;

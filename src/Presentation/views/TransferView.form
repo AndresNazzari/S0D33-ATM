@@ -1,45 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="Presentation.views.TransactionView">
-  <grid id="27dc6" binding="transactionPanel" layout-manager="GridLayoutManager" row-count="7" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="Presentation.views.TransferView">
+  <grid id="27dc6" binding="transferPanel" layout-manager="GridLayoutManager" row-count="7" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="10" left="10" bottom="10" right="10"/>
     <constraints>
-      <xy x="20" y="20" width="334" height="388"/>
+      <xy x="20" y="20" width="500" height="400"/>
     </constraints>
     <properties/>
     <border type="none"/>
     <children>
-      <component id="a3a51" class="javax.swing.JButton" binding="makeTransactionBtn">
-        <constraints>
-          <grid row="6" column="0" row-span="1" col-span="3" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties>
-          <text value="Make transaction"/>
-        </properties>
-      </component>
-      <component id="7c9ea" class="javax.swing.JLabel">
+      <component id="87116" class="javax.swing.JLabel">
         <constraints>
           <grid row="0" column="0" row-span="2" col-span="3" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <text value="Select Atm"/>
+          <text value="Select Customer To Transfer"/>
         </properties>
       </component>
-      <scrollpane id="84269">
+      <scrollpane id="6d600">
         <constraints>
           <grid row="3" column="0" row-span="1" col-span="3" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false">
             <preferred-size width="300" height="200"/>
           </grid>
         </constraints>
         <properties/>
-        <border type="none" title="Atm"/>
+        <border type="none" title="Customers"/>
         <children>
-          <component id="b1517" class="javax.swing.JTable" binding="atmTable">
+          <component id="5e428" class="javax.swing.JTable" binding="customersTable">
             <constraints/>
             <properties/>
           </component>
         </children>
       </scrollpane>
-      <component id="18f7a" class="javax.swing.JLabel">
+      <component id="ff12c" class="javax.swing.JLabel">
         <constraints>
           <grid row="4" column="0" row-span="1" col-span="3" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -47,7 +39,7 @@
           <text value="Insert Amount"/>
         </properties>
       </component>
-      <component id="edf2a" class="javax.swing.JTextField" binding="amountTxt">
+      <component id="96ffa" class="javax.swing.JTextField" binding="amountTxt">
         <constraints>
           <grid row="5" column="0" row-span="1" col-span="3" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="30"/>
@@ -55,7 +47,15 @@
         </constraints>
         <properties/>
       </component>
-      <component id="856e2" class="javax.swing.JLabel">
+      <component id="5ebe2" class="javax.swing.JButton" binding="makeTransferBtn">
+        <constraints>
+          <grid row="6" column="0" row-span="1" col-span="3" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Make transfer"/>
+        </properties>
+      </component>
+      <component id="2033e" class="javax.swing.JLabel">
         <constraints>
           <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -63,7 +63,7 @@
           <text value="Your Balance is: "/>
         </properties>
       </component>
-      <component id="1699b" class="javax.swing.JLabel" binding="balanceLabel">
+      <component id="49756" class="javax.swing.JLabel" binding="balanceLabel">
         <constraints>
           <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -71,7 +71,7 @@
           <text value="Label"/>
         </properties>
       </component>
-      <hspacer id="76043">
+      <hspacer id="8989d">
         <constraints>
           <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>

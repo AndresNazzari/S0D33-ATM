@@ -20,16 +20,18 @@ public class TransactionView extends JFrame{
     private JButton makeTransactionBtn;
     private JTable atmTable;
     private JTextField amountTxt;
+    private JLabel balanceLabel;
     private final TransactionType transactionType;
 
     public TransactionView(TransactionType transactionType) {
         this.transactionType = transactionType;
-
-        setTitle("Transaction - " + transactionType);
+        setTitle("Transaction - " + setViewTitle(this.transactionType));
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setContentPane(transactionPanel);
         setLocationRelativeTo(null);
         pack();
+
+        balanceLabel.setText("$" + UserSession.getInstance().getBalance());
 
         addWinListener();
         addMakeTransactionBtnListener();
@@ -55,24 +57,28 @@ public class TransactionView extends JFrame{
                 selectedAtm.setAtmId(atmId);
                 selectedAtm.setBalance(atmBalance);
 
-                String validationError = transactionValidations(selectedAtm, amount, transactionType, userSession.getBalance());
+                String validationError = transactionValidations(selectedAtm, amount, transactionType, userSession);
                 if (!validationError.isEmpty()) {
                     JOptionPane.showMessageDialog(this, validationError, "Invalid Input", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
 
                 AtmRepository.updateBalance(selectedAtm.getAtmId(), amount, transactionType);
-                AccountRepository.updateBalance(selectedAtm.getAtmId(), amount, userSession.getUserId(), userSession.getAccountId(), transactionType);
-                TransactionRepository.createTransaction(selectedAtm.getAtmId(), amount, userSession.getAccountId(), transactionType);
 
-                UserSession.updateBalance(amount, transactionType);
-                JOptionPane.showMessageDialog(this, "Transaction successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
-                dispose(); // Refresh ATM data
+                if (transactionType == TransactionType.A) {
+                    JOptionPane.showMessageDialog(this, "Founds Added to ATM successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    AccountRepository.updateMyBalance(amount, userSession.getUserId(), userSession.getAccountId(), TransactionType.D);
+                    TransactionRepository.createTransaction(selectedAtm.getAtmId(), amount, userSession.getAccountId(), transactionType);
+                    UserSession.updateBalance(amount, transactionType);
 
+                    JOptionPane.showMessageDialog(this, "Transaction successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                }
+
+                dispose();
                 DashView dashView = new DashView();
                 dashView.setVisible(true);
                 dashView.pack();
-
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(this, "Please enter a valid integer amount.", "Invalid Input", JOptionPane.ERROR_MESSAGE);
             } catch (SQLException ex) {
@@ -81,26 +87,35 @@ public class TransactionView extends JFrame{
         });
     }
 
-    private String transactionValidations(Atm selectedAtm,int amount,TransactionType transactionType,int userBalance){
+    private void loadAtms() throws SQLException {
+        List<Atm> atms = AtmRepository.getAtms();
+        atmTable.setModel(AtmService.atmsToTableModel(atms));
+    }
+
+    private String setViewTitle(TransactionType transactionType){
+        return switch (transactionType) {
+            case D -> "Deposit";
+            case W -> "Withdrawal";
+            case T -> "Transfer";
+            case A -> "Add funds to ATM";
+        };
+    }
+
+    private String transactionValidations(Atm selectedAtm,int amount,TransactionType transactionType,UserSession userSession){
         String Message = "";
         if (amount <= 0) {
             return "Please enter a valid amount greater than 0.";
         }
-        if (transactionType == TransactionType.W && amount > userBalance) {
+        if (transactionType == TransactionType.W && amount > userSession.getBalance()) {
             return "You dont have enough money to withdrawal.";
         }
         if (selectedAtm == null) {
             return "Please select an ATM. No ATM Selected";
         }
-        if (selectedAtm.getBalance() < amount && transactionType == TransactionType.W) {
+        if (transactionType != TransactionType.A && (transactionType == TransactionType.W && selectedAtm.getBalance() < amount)) {
             return "Insufficient ATM balance for this transaction. Insufficient Balance";
         }
         return Message;
-    }
-
-    private void loadAtms() throws SQLException {
-        List<Atm> atms = AtmRepository.getAtms();
-        atmTable.setModel(AtmService.atmsToTableModel(atms));
     }
 
     private void addWinListener(){
